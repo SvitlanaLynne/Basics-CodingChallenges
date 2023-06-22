@@ -38,3 +38,26 @@ function arrEndsWith(arrWords,ending)
     return(result);
 };
 
+
+//Using regex
+//--------------------
+
+const wordsArr = ['fabulous','happy','content','miraculous','mouse','wild'];
+
+function endCheck(arr)
+{
+    const re = /ous$/;
+    let matchEndArr = [];
+
+    for (elem of arr)
+    {
+        if (re.test(elem))
+        {
+            matchEndArr.push(elem);
+        };
+    };
+
+        return matchEndArr;
+};
+
+console.log(endCheck(wordsArr));
