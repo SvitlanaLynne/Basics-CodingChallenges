@@ -4,7 +4,7 @@ const nums = [2, 7, 11, 15];
 const nums1 = [3, 2, 4];
 const nums2 = [3, 3];
 
-//option 1
+// option 1
 const TwoSum = function (nums, target) {
   const diff = {};
   for (let i = 0; i < nums.length; i++) {
