@@ -3,7 +3,7 @@
 // (x= min element of an increasing sequence. if multiple, take the min)
 
 // const s = "1234";
-const s = "99100101";
+// const s = "99100101";
 // const s = "91011";
 // const s = "1920212223";
 // const s = "444444454446";
@@ -25,7 +25,7 @@ const s = "99100101";
 
 // const s = "99910001001";
 // const s = "7891011";
-// const s = "9899100";
+const s = "9899100";
 // const s = "999100010001";
 
 function splitString(s) {
@@ -50,16 +50,48 @@ function splitString(s) {
       } else {
         // check if the current is critical
         if (isCritical(arr[i])) {
-          const tryArr = testCriticalNext(arr[i], s);
+          console.log(
+            "current element is critical",
+            arr[i],
+            "its index is",
+            i,
+            "test its next element..."
+          );
+          const currentDigits = arr[i].toString().length;
+          const isNext10 = testCriticalNext(arr[i], i, currentDigits, arr);
 
-          // is next reassembled element is 10...?
-          console.log("TryArr", tryArr);
-          if (tryArr[0] - arr[i] === 1) {
-            arr = tryArr;
+          if (isNext10) {
+            const digits = i + 1;
+            let reassambledArr = reassamble(arr[i + 1], digits, s);
+            console.log("\nREASSEMBLED in critical case:", reassambledArr);
+            arr = reassambledArr;
             break;
+          } else {
+            // TRY MORE DIGITS
+            console.log(
+              "next after critical is 10:",
+              isNext10,
+              "trying more digits..."
+            );
+            const digits = i + 1 + 1; // next from current, plus shift from 0
+            let reassambledArr = reassamble(i + 1 + 1, digits, s);
+            console.log("REASSEMBLED array in critical case:", reassambledArr);
+            // ---- NO, did not help. Check if reassembling changed anything OR did not find the starting point and reassembled all in one piece
+            if (
+              reassambledArr.length === arr.length ||
+              arr[0].toString() === s
+            ) {
+              beautiful = false;
+              boolArr.push(false);
+              break;
+            } else {
+              // ---- YES, helped.
+              arr = reassambledArr;
+              console.log("\ncurrent array:", arr);
+            }
           }
         } else {
-          // try more digits
+          // TRY MORE DIGITS
           console.log("stuck on:", arr[i], "reassembling...");
           const digits = i + 1;
           let reassambledArr = reassamble(arr[i], digits, s);
@@ -71,7 +103,7 @@ function splitString(s) {
           } else {
             // ---- YES, helped.
             arr = reassambledArr;
-            console.log("REASSEMBLED ARR:", arr);
+            console.log("\nREASSEMBLED ARR:", arr);
           }
         }
       }
@@ -87,11 +119,21 @@ function splitString(s) {
     return beautiful;
   }
 
-  function testCriticalNext(num, s) {
-    let digits = num.toString().length;
-    const reassembledArr = reassamble(digits, digits + 1, s); // returns an array, where the num is the first elemnt, the rest is sliced with more digits
-    reassembledArr.shift();
-    return reassembledArr; // returns the sliced tail
+  function testCriticalNext(elem, i, digits, arr) {
+    arr.splice(0, i + 1);
+
+    const str = arr.join("");
+
+    const next = str.slice(0, digits + 1);
+
+    console.log("TAIL", str);
+    console.log("NEXT", next);
+
+    if (next - elem === 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function isCritical(num) {
@@ -100,9 +142,12 @@ function splitString(s) {
     return splitArr.every((x) => x === "9"); // returns true or false
   }
 
-  function reassamble(breakpoint, step, s) {
-    const nose = s.slice(0, breakpoint); // from beginning, including
-    const tail = s.slice(breakpoint); // not including breakpoint
+  function reassamble(breakpointIndex, step, s) {
+    const nose = s.slice(0, breakpointIndex); // from beginning, including
+    const tail = s.slice(breakpointIndex); // not including breakpoint
+
+    console.log("nose", nose);
+    console.log("tail", tail);
     const noseNum = parseInt(nose);
 
     const tailArr = [];
@@ -116,6 +161,35 @@ function splitString(s) {
 // console.log(splitString(s));
 splitString(s);
 
+// function testCriticalNext(num, s) {
+//   let digits = num.toString().length;
+//   const reassembledArr = reassamble(digits, digits + 1, s); // returns an array, where the num is the first elemnt, the rest is sliced with more digits
+//   reassembledArr.shift();
+//   return reassembledArr; // returns the sliced tail
+// }
+// console.log(testCriticalNext(9, s));
+
+// const s = "99100101";
+
+// function reassamble(breakpoint, step, s) {
+//   const nose = s.slice(0, breakpoint); // from beginning, including
+//   const tail = s.slice(breakpoint); // not including breakpoint
+
+//   console.log("nose", nose);
+//   console.log("tail", tail);
+
+//   const noseNum = parseInt(nose);
+
+//   const tailArr = [];
+//   for (i = 0; i < tail.length; i += step) {
+//     tailArr.push(parseInt(tail.slice(i, i + step)));
+//   }
+//   console.log("reassembled array", [noseNum, ...tailArr]);
+//   return [noseNum, ...tailArr]; // returns a new array
+// }
+
+// console.log(reassamble(1, 2, s));
+
 // duplicates
 // if (first === 9) {
 //   let i = 0;
@@ -123,3 +197,10 @@ splitString(s);
 //     first = first * 10 + 9;
 //     i++;
 //   }
+
+// function testCriticalNext(num, s) {
+//   let digits = num.toString().length;
+//   const reassembledArr = reassamble(digits, digits + 1, s); // returns an array, where the num is the first elemnt, the rest is sliced with more digits
+//   reassembledArr.shift();
+//   return reassembledArr; // returns the sliced tail
+// }
