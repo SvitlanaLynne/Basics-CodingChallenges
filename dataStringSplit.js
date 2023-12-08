@@ -3,19 +3,20 @@
 // (x= min element of an increasing sequence. if multiple, take the min)
 
 // const s = "1234";
+// const s = "56778";
 // const s = "99100101";
-// const s = "91011";
+const s = "91011";
 // const s = "1920212223";
 // const s = "444444454446";
 // const s = "110111112";
-// const s = "101102103"; <==================
-const s = "121314";
+// const s = "101102103";
+// const s = "121314";
 // const s = "122123124";
 // const s = "123124125";
 // const s = "1819212223";
 // const s = "2456";
 // const s = "23456";
-// const s = "67686869100";
+// const s = "67686869100"; <==========
 
 // const s = "7";
 // const s = "101103";
@@ -28,7 +29,8 @@ const s = "121314";
 // const s = "99910001001";
 // const s = "7891011";
 // const s = "9899100";
-// const s = "999100010001";
+// const s = "999100010001";  <==============
+// const s = "99910001001";
 
 function splitString(s) {
   //Initial Array
@@ -66,54 +68,43 @@ function splitString(s) {
       if (arr[i + 1] - arr[i] == 1) {
         beautiful = true;
       } else {
-        // // --------------- check if the current is CRITICAL
-        // if (isCritical(arr[i])) {
-        //   // 1) try array
-        //   console.log(
-        //     "current element is critical",
-        //     arr[i],
-        //     "its index is",
-        //     i,
-        //     "test its next element..."
-        //   );
+        // --------------- check if the current is CRITICAL
+        if (isCritical(arr[i])) {
+          // 1) try array
+          console.log(
+            "current element is critical",
+            arr[i],
+            "its index is",
+            i,
+            "test its next element..."
+          );
 
-        //   // const digits = arr[i].length;
-        //   // const step = digits + 1;
-        //   const tryArr = reassambleInCriticalCase(i, step, arr);
+          const tryArr = reassambleInCriticalCase(i, arr);
+          console.log("\nTRY array in CRITICAL case:", tryArr);
 
-        //   console.log("\nTRY array in CRITICAL case:", tryArr);
+          // 2) is next 10..?
+          if (tryArr[i + 1] - arr[i] == 1) {
+            arr = tryArr;
+            console.log(
+              "\nArray is now (should be equal to the try-array)",
+              arr
+            );
+            break;
+          }
+        }
+        //  ------------------------------------------------
 
-        //   // 2) is next 10..?
-        //   if (tryArr[i + 1] - arr[i] == 1) {
-        //     arr = tryArr;
-        //     console.log(
-        //       "\nArray is now (should be equal to the try-array)",
-        //       arr
-        //     );
-        //     break;
-        //   }
-        // }
-        // //  ------------------------------------------------
-        // // TRY MORE DIGITS
-
-        const digits = arr[i].length;
-        const step = digits + 1;
-
+        // TRY MORE DIGITS
         console.log("\nstuck after", arr[i], "index", i, "reassembling...");
-        console.log("current digits", digits);
-        console.log("current step", step);
 
-        let reassambledArr = reassamble(i, digits, step, s);
+        let reassambledArr = reassamble(arr[i], s);
         console.log("after reassembling, the output array", reassambledArr);
 
-        if (
-          reassambledArr.length === s.length ||
-          reassambledArr[0].toString() === s
-        ) {
+        if (reassambledArr.length === s.length || reassambledArr[0] === s) {
           // ---- NO, did not help. Check if reassembling changed anything OR did not find the starting point and reassembled all in one piece
           console.log("\nReassembling did NOT help");
           beautiful = false;
-          // break;
+          break;
         } else {
           // ---- YES, helped.
           arr = reassambledArr;
@@ -135,11 +126,14 @@ function splitString(s) {
     return splitArr.every((x) => x === "9"); // returns true or false
   }
 
-  function reassamble(i, digits, step, s) {
-    console.log("cut first", i + 1 + 1);
+  function reassamble(elem, s) {
+    console.log("Reassembling function...");
+    const digits = elem.length + 1; // including
+    const step = digits;
+    console.log("cut first", digits);
     console.log("step to cut the tail", step);
-    const nose = s.slice(0, i + 1 + 1);
-    const tail = s.slice(i + 1 + 1);
+    const nose = s.slice(0, digits);
+    const tail = s.slice(digits);
 
     console.log("--- reassembling ---nose", nose);
     console.log("--- reassembling ---tail", tail);
@@ -152,7 +146,10 @@ function splitString(s) {
     return [nose, ...tailArr]; // returns a new array
   }
 
-  function reassambleInCriticalCase(i, step, arr) {
+  function reassambleInCriticalCase(i, arr) {
+    const digits = arr[i].length;
+    const step = digits + 1;
+
     const nose = arr.slice(0, i + 1);
     const tail = arr.slice(i + 1).join("");
 
