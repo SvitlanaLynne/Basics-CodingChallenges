@@ -5,7 +5,7 @@
 // const s = "1234";
 // const s = "56778";
 // const s = "99100101";
-const s = "91011";
+// const s = "91011";
 // const s = "1920212223";
 // const s = "444444454446";
 // const s = "110111112";
@@ -16,7 +16,7 @@ const s = "91011";
 // const s = "1819212223";
 // const s = "2456";
 // const s = "23456";
-// const s = "67686869100"; <==========
+// const s = "67686869100";
 
 // const s = "7";
 // const s = "101103";
@@ -29,7 +29,7 @@ const s = "91011";
 // const s = "99910001001";
 // const s = "7891011";
 // const s = "9899100";
-// const s = "999100010001";  <==============
+// const s = "999100010001";
 // const s = "99910001001";
 
 function splitString(s) {
@@ -61,14 +61,17 @@ function splitString(s) {
   }
 
   // Loop until the result is found (true or false)
-  let beautiful;
+  let resultFound = false;
 
-  while (beautiful !== true && beautiful !== false) {
+  while (resultFound !== true) {
+    let boolArr = [];
     for (let i = 0; i < arr.length - 1; i++) {
       if (arr[i + 1] - arr[i] == 1) {
-        beautiful = true;
+        boolArr.push(true);
       } else {
-        // --------------- check if the current is CRITICAL
+        // 1
+        boolArr.push(false);
+        // 2 --------------- check if the current is CRITICAL
         if (isCritical(arr[i])) {
           // 1) try array
           console.log(
@@ -94,30 +97,29 @@ function splitString(s) {
         }
         //  ------------------------------------------------
 
-        // TRY MORE DIGITS
+        // 3 TRY MORE DIGITS
         console.log("\nstuck after", arr[i], "index", i, "reassembling...");
 
         let reassambledArr = reassamble(arr[i], s);
-        console.log("after reassembling, the output array", reassambledArr);
 
-        if (reassambledArr.length === s.length || reassambledArr[0] === s) {
-          // ---- NO, did not help. Check if reassembling changed anything OR did not find the starting point and reassembled all in one piece
-          console.log("\nReassembling did NOT help");
-          beautiful = false;
-          break;
-        } else {
-          // ---- YES, helped.
-          arr = reassambledArr;
-          console.log("\nREASSEMBLED ARR:", arr);
+        console.log("result of reassembling is", reassambledArr);
+        console.log("initial array is", arr);
+
+        if (reassambledArr.length === arr.length || reassambledArr[0] === s) {
+          console.log("EXIT with NO");
+          return;
         }
+
+        // 4 Rewrite the arr
+        arr = reassambledArr;
+        console.log("\nLength comparison is false, REASSAMBLED ARR", arr);
       }
     }
-  }
-  // all elements are checked, beautiful is...
-  if (beautiful === true) {
-    console.log(` basic check, YES ${arr[0]}`);
-  } else {
-    console.log("NO, still not true");
+    console.log(boolArr);
+    if (!boolArr.includes(false)) {
+      console.log("EXIT with YES");
+      resultFound = true;
+    }
   }
 
   function isCritical(num) {
@@ -162,3 +164,27 @@ function splitString(s) {
 }
 // console.log(splitString(s));
 splitString(s);
+
+// SKELETON
+// let resultFound = false;
+
+// while (resultFound !== true) {
+//   let boolArr = [];
+//   for (i = 0; i < 3; i++) {
+//     if (2 === 3) {
+//       boolArr.push(true);
+//     } else {
+//       boolArr.push(false);
+//       if (2 === 2) {
+//         console.log("should now exit the whole While loop. NO");
+//         // resultFound = true;
+//         return;
+//       }
+//     }
+//   }
+//   console.log(boolArr);
+//   if (!boolArr.includes(false)) {
+//     console.log("no False in the boolArr. YES");
+//     resultFound = true;
+//   }
+// }
