@@ -2,7 +2,7 @@
 // Print YES x  or NO
 // (x= min element of an increasing sequence. if multiple, take the min)
 
-// const s = "1234";
+const s = "1234";
 // const s = "56778";
 // const s = "99100101";
 // const s = "91011";
@@ -31,6 +31,29 @@
 // const s = "9899100";
 // const s = "999100010001";
 // const s = "99910001001";
+
+//10
+// 90071992547409929007199254740993
+// 45035996273704964503599627370497
+// 22517998136852482251799813685249
+// 11258999068426241125899906842625
+// 562949953421312562949953421313
+// 90071992547409928007199254740993
+// 45035996273704963503599627370497
+// 22517998136852481251799813685249
+// 11258999068426240125899906842625
+// 562949953421312462949953421313
+
+// YES 9007199254740992
+// YES 4503599627370496
+// YES 2251799813685248
+// YES 1125899906842624
+// YES 562949953421312
+// NO
+// NO
+// NO
+// NO
+// NO
 
 function splitString(s) {
   //Initial Array
@@ -142,7 +165,7 @@ function splitString(s) {
     // const noseNum = parseInt(nose);
 
     const tailArr = [];
-    for (i = 0; i < tail.length; i += step) {
+    for (let i = 0; i < tail.length; i += step) {
       tailArr.push(tail.slice(i, i + step));
     }
     return [nose, ...tailArr]; // returns a new array
@@ -156,7 +179,7 @@ function splitString(s) {
     const tail = arr.slice(i + 1).join("");
 
     const tailArr = [];
-    for (i = 0; i < tail.length; i += step) {
+    for (let i = 0; i < tail.length; i += step) {
       tailArr.push(tail.slice(i, i + step));
     }
     return [...nose, ...tailArr]; // returns a new array
@@ -187,4 +210,99 @@ splitString(s);
 //     console.log("no False in the boolArr. YES");
 //     resultFound = true;
 //   }
+// }
+
+// Uncommented, no console.log-s
+// let arr = s.split("");
+// console.log("initial array:", arr);
+
+// if (arr[0] == 0 || arr.length === 1) {
+//   console.log(`NO`);
+//   return;
+// }
+
+// if (arr[0] == "9") {
+//   let i = 0;
+//   let first = "9";
+//   let count = 0;
+//   while (arr[i] === "9") {
+//     count++;
+//     i++;
+//   }
+//   first = first.repeat(count);
+//   const part2 = arr.splice(first.length);
+
+//   arr = [first, ...part2];
+// }
+
+// let resultFound = false;
+
+// while (resultFound !== true) {
+//   let boolArr = [];
+//   for (let i = 0; i < arr.length - 1; i++) {
+//     if (arr[i + 1] - arr[i] == 1) {
+//       boolArr.push(true);
+//     } else {
+//       boolArr.push(false);
+
+//       if (isCritical(arr[i])) {
+
+//         const tryArr = reassambleInCriticalCase(i, arr);
+
+//         if (tryArr[i + 1] - arr[i] == 1) {
+//           arr = tryArr;
+//           break;
+//         }
+//       }
+
+//       let reassambledArr = reassamble(arr[i], s);
+
+//       if (reassambledArr.length === arr.length || reassambledArr[0] === s) {
+//         console.log(`NO`);
+//         return;
+//       }
+
+//       arr = reassambledArr;
+//     }
+//   }
+//   console.log(boolArr);
+//   if (!boolArr.includes(false)) {
+//     console.log(`YES ${arr[0]}`);
+//     resultFound = true;
+//   }
+// }
+
+// function isCritical(num) {
+//   const string = num.toString();
+//   const splitArr = string.split("");
+//   return splitArr.every((x) => x === "9");
+// }
+
+// function reassamble(elem, s) {
+
+//   const digits = elem.length + 1;
+//   const step = digits;
+
+//   const nose = s.slice(0, digits);
+//   const tail = s.slice(digits);
+
+//   const tailArr = [];
+//   for (i = 0; i < tail.length; i += step) {
+//     tailArr.push(tail.slice(i, i + step));
+//   }
+//   return [nose, ...tailArr];
+// }
+
+// function reassambleInCriticalCase(i, arr) {
+//   const digits = arr[i].length;
+//   const step = digits + 1;
+
+//   const nose = arr.slice(0, i + 1);
+//   const tail = arr.slice(i + 1).join("");
+
+//   const tailArr = [];
+//   for (i = 0; i < tail.length; i += step) {
+//     tailArr.push(tail.slice(i, i + step));
+//   }
+//   return [...nose, ...tailArr];
 // }
