@@ -1,4 +1,5 @@
 // Return the array of k mins, which wre calculated as the difference of max and min of k elements.
+// This code checks the k-length sub-sequences of the array only, not all possible combinations of the elements.
 
 // const arr = [1, 4, 7, 2];
 const arr = [10, 4, 1, 2, 3, 4, 10, 20, 30, 40, 100, 200];
@@ -15,4 +16,3 @@ function minDiffArr(k, arr) {
     );
 }
 console.log(minDiffArr(k, arr));
-
