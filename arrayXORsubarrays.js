@@ -9,6 +9,7 @@ const arr = [3, 4, 5];
 // Even arrays result in 0. XOR is applied to the sequence by pairs only: (a XOR b) XOR (c XOR d). Since a XOR a and b XOR b result in 0, and similarly for c XOR c and d XOR d, the overall result is 0.
 // x XOR x = 0 .
 // x XOR 0 is always x.
+// x ^ y ^ z is occumulative operation. result of the 1st pair is compared with the next number.
 
 function XOR(arr) {
   if (arr.length % 2 === 0) {
