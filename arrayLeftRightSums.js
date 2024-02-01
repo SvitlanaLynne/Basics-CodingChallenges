@@ -10,6 +10,11 @@ const arr = [1, 2, 3, 3];
 function findElement(arr) {
   //   arr = [0, ...arr, 0];
   //     console.log("ARR", arr);
+  if (arr.length === 1) {
+    arr = [0, ...arr, 0];
+  } else if (arr.length === 2) {
+    arr = [0, ...arr];
+  }
 
   for (let i = 1; i < arr.length - 2; i++) {
     let left = arr.slice(0, i);
