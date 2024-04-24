@@ -1,4 +1,4 @@
-// Return a string "ANDY"  or "BOB" depending who wins the game
+// Return a string "ANDY" or "BOB" depending who wins the game
 // Bob playes first
 // take of the max element and all elements to its right
 // wins who made the last move
@@ -10,38 +10,6 @@
 const arr = [5, 2, 6, 3, 4];
 // const arr = [3, 1];
 // const arr = [5];
-
-function Whoseturn(arr) {
-  // more than 1 element?
-  if (arr.length === 1) {
-    return "BOB";
-  }
-
-  let currentPlayer = "BOB";
-
-  function switchPlayer() {
-    currentPlayer = currentPlayer === "BOB" ? "ANDY" : "BOB";
-  }
-
-  while (arr.length > 1) {
-    console.log("\ncurrent player", currentPlayer);
-    const currentMax = Math.max(...arr);
-    console.log("Max was", currentMax);
-
-    const indexOfMax = arr.indexOf(currentMax);
-    arr = arr = arr.slice(0, indexOfMax);
-    console.log("Sliced Arr", arr);
-
-    if (arr.length === 0) {
-      return currentPlayer;
-    }
-    switchPlayer();
-    console.log("switched the player to", currentPlayer);
-  }
-  return currentPlayer;
-}
-
-console.log(Whoseturn(arr));
 
 //OPTIMIZED OPTION
 function Whoseturn(arr) {
@@ -80,3 +48,5 @@ function Whoseturn(arr) {
   // Return the current player if there's only one element left in the array
   return currentPlayer;
 }
+
+console.log(Whoseturn(arr));

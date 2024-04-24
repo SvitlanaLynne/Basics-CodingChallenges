@@ -27,6 +27,7 @@ function toMagicSquareCost(s) {
   const d2 = [s[0][2], s[1][1], s[2][0]];
 
   // ----- EARLY - initial matrix is megical: return 0 as a cost
+  let SumsArr = [];
   if (isMagical(s)) {
     return 0;
   } else {
@@ -113,43 +114,87 @@ function toMagicSquareCost(s) {
     // pick and output the minimum
   }
 
-  function isMagical(matrix) {
-    // ----- PREPARE DATA  - SUMS
-    // Reduce - sum of all elements - got an Array and Object of sums
-    const arrays = {
-      a1: a1,
-      a2: a2,
-      a3: a3,
-      b1: b1,
-      b2: b2,
-      b3: b3,
-      d1: d1,
-      d2: d2,
-    };
-    const SumsObj = {};
+  // function isMagical(matrix) {
+  //   // ----- PREPARE DATA  - SUMS
+  //   // Reduce - sum of all elements - got an Array and Object of sums
+  //   const arrays = {
+  //     a1: a1,
+  //     a2: a2,
+  //     a3: a3,
+  //     b1: b1,
+  //     b2: b2,
+  //     b3: b3,
+  //     d1: d1,
+  //     d2: d2,
+  //   };
+  //   const SumsObj = {};
 
-    for (let key in arrays) {
-      if (arrays.hasOwnProperty(key)) {
-        const arrayName = key;
-        const array = arrays[key];
-        const sum = array.reduce((total, current) => total + current);
-        SumsObj[arrayName] = sum;
-      }
-    }
+  //   for (let key in arrays) {
+  //     if (arrays.hasOwnProperty(key)) {
+  //       const arrayName = key;
+  //       const array = arrays[key];
+  //       const sum = array.reduce((total, current) => total + current);
+  //       SumsObj[arrayName] = sum;
+  //     }
+  //   }
 
-    console.log(SumsObj);
+  //   console.log("Sums:", SumsObj);
 
-    const SumsArr = [];
-    for (let elem in SumsObj) {
-      SumsArr.push(SumsObj[elem]);
-    }
+  //   const SumsArr = [];
+  //   for (let elem in SumsObj) {
+  //     SumsArr.push(SumsObj[elem]);
+  //   }
 
-    const set = [...new Set(SumsArr)];
-    if (set.length === 1) {
-      console.log("The square is MAGICAL");
-      return true;
-    }
-  }
+  //   const set = [...new Set(SumsArr)];
+  //   if (set.length === 1) {
+  //     console.log("The square is MAGICAL");
+  //     return true;
+  //   }
+  // }
 }
 
-console.log(toMagicSquareCost(s));
+// console.log(toMagicSquareCost(s));
+
+function isNMagical(matrix) {
+  const a1 = [s[0][0], s[0][1], s[0][2]];
+  const a2 = [s[1][0], s[1][1], s[1][2]];
+  const a3 = [s[2][0], s[2][1], s[2][2]];
+
+  const b1 = [s[0][0], s[1][0], s[2][0]];
+  const b2 = [s[0][1], s[1][1], s[2][1]];
+  const b3 = [s[0][2], s[1][2], s[2][2]];
+
+  const d1 = [s[0][0], s[1][1], s[2][2]];
+  const d2 = [s[0][2], s[1][1], s[2][0]];
+  const arrays = {
+    a1: a1,
+    a2: a2,
+    a3: a3,
+    b1: b1,
+    b2: b2,
+    b3: b3,
+    d1: d1,
+    d2: d2,
+  };
+  let sumsFreq = {};
+  for (let key in arrays) {
+    // calc the sum of a line
+    if (arrays.hasOwnProperty(key)) {
+      const arrayName = key;
+      const array = arrays[key];
+      let sum = 0;
+      sum = array.reduce((total, current) => total + current);
+      // store its frequency
+      if (sumsFreq[sum]) {
+        sumsFreq[sum]++;
+      } else {
+        sumsFreq[sum] = 1;
+      }
+    }
+  }
+
+  console.log("Sums frequency is ", sumsFreq);
+  return Object.keys(sumsFreq) !== 1 ? false : true;
+}
+
+console.log(isNMagical(s));
