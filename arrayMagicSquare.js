@@ -32,7 +32,7 @@ function toMagicSquareCost(s) {
   const d1 = [s[0][0], s[1][1], s[2][2]];
   const d2 = [s[0][2], s[1][1], s[2][0]];
 
-  const Sums = (matrix) => {
+  const calcSums = (matrix) => {
     const arrays = {
       a1: a1,
       a2: a2,
@@ -43,7 +43,9 @@ function toMagicSquareCost(s) {
       d1: d1,
       d2: d2,
     };
+    let SumCount = {};
     let Sums = {};
+
     for (let key in arrays) {
       // calc the sum of a line
       if (arrays.hasOwnProperty(key)) {
@@ -52,54 +54,59 @@ function toMagicSquareCost(s) {
         let sum = 0;
         sum = array.reduce((total, current) => total + current);
         // store its frequency
-        if (Sums[sum]) {
-          Sums[sum]++;
+        if (SumCount[sum]) {
+          SumCount[sum]++;
         } else {
-          Sums[sum] = 1;
+          SumCount[sum] = 1;
         }
+        // sums coordinates
+        Sums[key] = sum;
       }
     }
 
-    return Sums;
+    return { SumCount, Sums };
   };
 
   // ----- EARLY - initial matrix is megical: return 0 as a cost
-  const SumsResult = Sums(s);
-  if (Object.keys(SumsResult).length === 1) {
+  const { SumCount, Sums } = calcSums(s);
+  if (Object.keys(SumCount).length === 1) {
     return 0;
   } else {
     // ----- ANALYSE DATA
-    console.log("Sums:", SumsResult);
+    console.log("Sums Count:", SumCount);
     // max  frequent among sums
-    let max = 0;
-    for (let elem in SumsResult) {
-      if (SumsResult[elem] > max) {
-        max = +SumsResult[elem];
+    let maxCount = 0;
+    for (let elem in SumCount) {
+      if (SumCount[elem] > maxCount) {
+        maxCount = +SumCount[elem];
       }
     }
-    console.log("Max is", max);
+
+    const getKeyByValue = (obj, value) => {
+      return +Object.keys(obj).find((elem) => obj[elem] === value);
+    };
+    const aimSum = getKeyByValue(SumCount, maxCount);
+    console.log("Aiming sum is", aimSum);
 
     // ----- EVALUATE INITIAL STATE
     // idfentify those, which are not max
-    const filtered = SumsArr.filter((x) => x !== parseInt(maxFrequent));
-    const numberOfSumsOff = filtered.length;
+    console.log("Sums", Sums);
+    const linesOff = Object.keys(Sums).filter(
+      (elem) => Sums[elem] !== parseInt(aimSum)
+    );
+    console.log("Lines Off", linesOff);
 
     // calc aiming sum
     const aimingSum = maxFrequent * numberOfSumsOff;
     // calc current sum
-    const actualSum = filtered.reduce((acc, current) => acc + current);
+    const actualSum = linesOff.reduce((acc, current) => acc + current);
 
     console.log("Matrix is Off by", Math.abs(aimingSum - actualSum));
 
     // ----- ADJUSTING WITH THE SIMULATED ANNEALING
 
     // Find lines Off
-    const linesOff = [];
-    for (let key in SumsObj) {
-      if (SumsObj[key] !== maxFrequent) {
-        linesOff.push(key);
-      }
-    }
+
     // Find potential elements to adjust
     let toAdjust = {};
     if (linesOff.length > 1) {
