@@ -32,17 +32,17 @@ function toMagicSquareCost(s) {
   const d1 = [s[0][0], s[1][1], s[2][2]];
   const d2 = [s[0][2], s[1][1], s[2][0]];
 
+  const arrays = {
+    a1: a1,
+    a2: a2,
+    a3: a3,
+    b1: b1,
+    b2: b2,
+    b3: b3,
+    d1: d1,
+    d2: d2,
+  };
   const calcSums = (matrix) => {
-    const arrays = {
-      a1: a1,
-      a2: a2,
-      a3: a3,
-      b1: b1,
-      b2: b2,
-      b3: b3,
-      d1: d1,
-      d2: d2,
-    };
     let SumCount = {};
     let Sums = {};
 
@@ -59,12 +59,15 @@ function toMagicSquareCost(s) {
         } else {
           SumCount[sum] = 1;
         }
-        // sums coordinates
+        // sums maping with lines
         Sums[key] = sum;
       }
     }
 
     return { SumCount, Sums };
+  };
+  const isMagical = () => {
+    return SumCount.length === 1 ? true : false;
   };
 
   // ----- EARLY - initial matrix is megical: return 0 as a cost
@@ -89,57 +92,42 @@ function toMagicSquareCost(s) {
     console.log("Aiming sum is", aimSum);
 
     // ----- EVALUATE INITIAL STATE
-    // idfentify those, which are not max
+    // idfentify lines, which are not max
     console.log("Sums", Sums);
     const linesOff = Object.keys(Sums).filter(
       (elem) => Sums[elem] !== parseInt(aimSum)
     );
     console.log("Lines Off", linesOff);
 
-    // calc aiming sum
-    const aimingSum = maxFrequent * numberOfSumsOff;
-    // calc current sum
-    const actualSum = linesOff.reduce((acc, current) => acc + current);
+    // find the number to adjust
+    const linesOffArr = linesOff.map((x) => arrays[x]);
+    console.log("Arrays to compare", linesOffArr);
 
-    console.log("Matrix is Off by", Math.abs(aimingSum - actualSum));
+    const numberToAdjust = (linesOffArr) => {
+      let common = [];
+      for (let i = 0; i < linesOffArr.length - 1; i++) {
+        common.push(
+          ...linesOffArr[i].filter((elem) => linesOffArr[i + 1].includes(elem))
+        );
+      }
+      return common;
+    };
+
+    console.log("NUMBER(s) to adjust", numberToAdjust(linesOffArr));
 
     // ----- ADJUSTING WITH THE SIMULATED ANNEALING
 
-    // Find lines Off
+    // Set the direction of trials (add or substract)
 
-    // Find potential elements to adjust
-    let toAdjust = {};
-    if (linesOff.length > 1) {
-      for (let i = 0; i < linesOff.length - 1; i++) {
-        let arr1 = eval(linesOff[i]);
-        console.log("arr1", arr1);
-        let arr2 = eval(linesOff[i + 1]);
-        console.log("arr2", arr2);
-        let set = new Set(arr1);
-        console.log("set of the current array is", set);
-        for (let j = 0; j < arr2.length; j++) {
-          if (set.has(arr2[j])) {
-            console.log("COMMON ELEMENT is", arr2[j]);
-            toAdjust[linesOff[i]] = arr2[j];
-          } else {
-            ("no common found, but should!");
-          }
-        }
-      }
-    } else {
-      console.log("Just ONE line is off. Look through it");
-      toAdjust[linesOff[i]] = eval(linesOff[i]);
-    }
-    console.log("toAdjust", toAdjust);
+    // Set the Base Case when the alternation is accepted and the limit of trials
+    let i = 8;
 
-    // Set the Base Case when the alternation is accepted
-    // Set the limit of trials
-    let i = 4;
     while (isMagical(matrix) === false && i > 0) {
+      // Adjust the elements
+
       i--;
     }
-    // Set the range of trials
-    // Adjust the elements
+
     // Reevaluate if the adjustment is sufficient
     // Gather potential answers (difference between the initial and current,adjusted element)
     // pick and output the minimum
