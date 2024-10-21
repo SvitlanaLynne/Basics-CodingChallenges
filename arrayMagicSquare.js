@@ -1,4 +1,4 @@
-// Input : 2d array of integers
+// Input : matrix 3x3 of integers
 // Output: integer, a minimum cost to make the random square magical
 // Magical if the sums of all rows, columns and diagonal are the same number.
 
