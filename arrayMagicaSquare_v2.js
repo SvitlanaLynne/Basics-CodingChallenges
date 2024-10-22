@@ -54,7 +54,8 @@ const isMagical = (MagBoolArr) => {
   MagBoolArr.reduce((total, current) => total + current) === 8 ? true : false;
 };
 
-// find The Sum
+/// find The Sum
+// calc the Array of Sums
 let ActualSumArr = [];
 const ActualSum = (line) => line.reduce((total, current) => total + current, 0);
 
@@ -65,21 +66,40 @@ for (let key in sequenceMap) {
     ActualSumArr.push(sum);
   }
 }
-
 console.log("ActualSum Arr:", ActualSumArr);
 
-const mapFrequencyWithIndex = (arr) => {
-  const frequencyMap = {};
+// find the lines off
+function mapFrequency (arr) {
+  const map = {};
 
   arr.forEach((element, index) => {
-    if (frequencyMap[element]) {
-      frequencyMap[element].count += 1;
+    if (map[element]) {
+      map[element].count += 1;
     } else {
-      frequencyMap[element] = { count: 1, index: index };
+      map[element] = { count: 1, index: index };
     }
   });
 
-  return frequencyMap;
+  return map;
 };
 
-console.log("Frequency and indexes", mapFrequencyWithIndex(ActualSumArr));
+const FrequencyMap = mapFrequency(ActualSumArr);
+
+console.log("Frequency and indexes", JSON.stringify(FrequencyMap));
+
+// find The Sum (most frequent in the object)
+const TheSum = (obj) => {
+let maxCount = 0;
+let MagSum = 0;
+for (let elem in obj){
+  if (obj[elem].count >= maxCount){
+    maxCount=obj[elem].count;
+    MagSum = elem;
+  }
+}
+return MagSum;
+}
+
+console.log("MOST FREQUENT SUM:", TheSum(FrequencyMap))
+
+
