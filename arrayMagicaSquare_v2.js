@@ -68,38 +68,62 @@ for (let key in sequenceMap) {
 }
 console.log("ActualSum Arr:", ActualSumArr);
 
-// find the lines off
-function mapFrequency (arr) {
+// find out, count and index the sums of all lines
+function mapFrequency(arr) {
   const map = {};
 
   arr.forEach((element, index) => {
     if (map[element]) {
       map[element].count += 1;
+      map[element].indexes.push(index); // Add the current index to the array
     } else {
-      map[element] = { count: 1, index: index };
+      map[element] = { count: 1, indexes: [index] }; // Start with an array of the first index
     }
   });
 
   return map;
-};
+}
 
 const FrequencyMap = mapFrequency(ActualSumArr);
 
-console.log("Frequency and indexes", JSON.stringify(FrequencyMap));
+// console.log("Frequency and indexes", JSON.stringify(FrequencyMap));
+console.log("Frequency and indexes", FrequencyMap);
 
 // find The Sum (most frequent in the object)
 const TheSum = (obj) => {
-let maxCount = 0;
-let MagSum = 0;
-for (let elem in obj){
-  if (obj[elem].count >= maxCount){
-    maxCount=obj[elem].count;
-    MagSum = elem;
+  let maxCount = 0;
+  let MagSum = 0;
+  for (let elem in obj) {
+    if (obj[elem].count >= maxCount) {
+      maxCount = obj[elem].count;
+      MagSum = elem;
+    }
   }
-}
-return MagSum;
-}
+  return MagSum;
+};
 
-console.log("MOST FREQUENT SUM:", TheSum(FrequencyMap))
+console.log("MOST FREQUENT SUM:", TheSum(FrequencyMap));
 
+// find the lines off (remembered indexes)
 
+const linesOff = (obj, SqnceArr) => {
+  const items = Object.values(obj).filter(
+    (item) => item.indexes && item.indexes.length > 0
+  ); // Ensure item has indexes
+
+  // Find the item with the longest indexes array
+  const longestItem = items.reduce(
+    (prev, current) =>
+      current.indexes.length > prev.indexes.length ? current : prev,
+    items[0]
+  );
+
+  // Filter out the longest item and return the rest
+  return items
+    .filter((item) => item !== longestItem)
+    .flatMap((item) => item.indexes.map((index) => SqnceArr[index]));
+};
+
+console.log("LINES OFF:", linesOff(FrequencyMap, sequenceArr));
+
+//identify the elements off (crossings)
